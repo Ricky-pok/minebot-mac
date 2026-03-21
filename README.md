@@ -1,45 +1,45 @@
-# macro-mac-ricky
+# minebot-mac
 
-A native Swift project for building a mining-focused automation bot on macOS.
+A native Swift project for building a mining-focused automation tool on macOS.
 
-## Project Theme
-This repository is currently centered around the idea of a **mining bot**: a tool designed to observe a game-like mining workflow, react to visual states, and execute predefined actions through a structured automation engine.
+## Overview
+This repository is focused on the early design of a mining-oriented bot/application for macOS. The project is intended to become a structured, modular system capable of observing visual states, interpreting predefined signals, and executing configured actions through a native Swift-based foundation.
 
-The project is still in its concept and planning stage. The exact behavior, boundaries, and implementation details are not fully defined yet, so this repository is being updated first with a clear direction before locking in a full roadmap.
+At this stage, the project is still being shaped. The overall direction is clear, but the implementation details are intentionally not locked yet.
 
 ## Vision
-Create a modular Mac automation tool in Swift that can evolve into a reliable mining-oriented bot with:
-- visual detection
-- action execution
-- configurable logic
-- reusable profiles
-- a simple interface for managing behavior
+Create a native macOS automation tool in Swift that can grow into a dependable mining-focused system with:
+- visual detection capabilities
+- configurable action flows
+- modular internal architecture
+- profile-based behavior definitions
+- simple operation and maintainability
 
-The long-term vision is to make the system flexible enough to support repeated mining workflows while remaining organized, debuggable, and extensible.
+The long-term vision is to build something flexible, understandable, and extensible rather than a fragile one-off script.
 
 ## Mission
-Build a native macOS foundation for a mining bot that can eventually:
-- observe on-screen visual cues
-- identify relevant mining states
-- trigger keyboard and mouse actions
-- react to changing conditions
-- support future profile-based behavior configuration
+Establish a strong native foundation for a mining bot/application that can eventually:
+- observe visual cues on screen
+- identify relevant mining-related states
+- execute keyboard and mouse actions
+- react to changing conditions through configurable logic
+- support future reusable profiles and structured behavior editing
 
-The immediate mission is **not** to define every feature now, but to establish the project identity and prepare the codebase for future technical planning.
+The immediate mission is to define the project's identity, boundaries, and technical direction before committing to a full roadmap.
 
-## Current State
-Right now, the repository is in a **pre-roadmap phase**.
+## Current Phase
+The repository is currently in a **pre-roadmap planning phase**.
 
 That means:
-- the theme is defined
-- the intent is defined
-- the roadmap is intentionally postponed
-- more details still need to be clarified before committing to implementation stages
+- the project theme is defined
+- the vision and mission are defined
+- scope is being clarified
+- detailed milestones are intentionally deferred until the remaining unknowns are resolved
 
 ## Stack
 - Language: Swift
 - Platform: macOS
 - Package Manager: Swift Package Manager
 
-## Development Note
-This repository will continue evolving as the project requirements become clearer.
+## Documentation
+Additional planning notes live in the `docs/` directory.
