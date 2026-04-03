@@ -4,191 +4,213 @@ struct MacroRow: Identifiable {
     let id = UUID()
     let icon: String
     let command: String
-    let action: String
-    let value1: String
-    let value2: String
+    let c2: String
+    let c3: String
+    let c4: String
     let color: Color
 }
 
 struct ContentView: View {
     private let rows: [MacroRow] = [
-        .init(icon: "keyboard", command: "KEYBOARD", action: "KeyDown", value1: "\"ShiftLeft\"", value2: "", color: .blue),
-        .init(icon: "cursorarrow.motionlines", command: "MOUSE", action: "Move", value1: "X = 215", value2: "Y = 24", color: .green),
-        .init(icon: "keyboard", command: "KEYBOARD", action: "KeyUp", value1: "\"Capital\"", value2: "", color: .blue),
-        .init(icon: "cursorarrow.motionlines", command: "MOUSE", action: "Move", value1: "X = 532", value2: "Y = 244", color: .green),
-        .init(icon: "cursorarrow.click", command: "MOUSE", action: "Click", value1: "X = 599", value2: "Y = 352", color: .green),
-        .init(icon: "doc", command: "OPEN FILE", action: "notepad", value1: "", value2: "", color: .red),
-        .init(icon: "textformat", command: "TYPE TEXT", action: "This is the droid you're looking for!", value1: "", value2: "", color: .red),
-        .init(icon: "hourglass", command: "DELAY", action: "10", value1: "", value2: "", color: .orange),
-        .init(icon: "globe", command: "OPEN URL", action: "http://jitbit.com", value1: "", value2: "", color: .red),
-        .init(icon: "xmark.rectangle", command: "CLOSE WINDOW", action: "*notepad*", value1: "", value2: "", color: .red),
-        .init(icon: "photo", command: "FIND IMAGE", action: "", value1: "", value2: "", color: .red),
-        .init(icon: "cursorarrow.motionlines", command: "MOUSE", action: "Move", value1: "X = 215", value2: "Y = 24", color: .green)
+        .init(icon: "keyboard", command: "KEYBOARD", c2: "KeyDown", c3: "\"ShiftLeft\"", c4: "", color: Color(red: 0.10, green: 0.35, blue: 0.95)),
+        .init(icon: "cursorarrow.motionlines", command: "MOUSE", c2: "Move", c3: "X = 215", c4: "Y = 24", color: Color(red: 0.10, green: 0.62, blue: 0.18)),
+        .init(icon: "keyboard", command: "KEYBOARD", c2: "KeyUp", c3: "\"Capital\"", c4: "", color: Color(red: 0.10, green: 0.35, blue: 0.95)),
+        .init(icon: "cursorarrow.motionlines", command: "MOUSE", c2: "Move", c3: "X = 532", c4: "Y = 244", color: Color(red: 0.10, green: 0.62, blue: 0.18)),
+        .init(icon: "cursorarrow.click", command: "MOUSE", c2: "Click", c3: "X = 599", c4: "Y = 352", color: Color(red: 0.10, green: 0.62, blue: 0.18)),
+        .init(icon: "folder", command: "OPEN FILE", c2: "notepad", c3: "", c4: "", color: .red),
+        .init(icon: "textformat", command: "TYPE TEXT", c2: "This is the droid you're looking for!", c3: "", c4: "", color: .red),
+        .init(icon: "hourglass", command: "DELAY", c2: "10", c3: "", c4: "", color: .orange),
+        .init(icon: "globe", command: "OPEN URL", c2: "http://jitbit.com", c3: "", c4: "", color: .red),
+        .init(icon: "xmark.rectangle", command: "CLOSE WINDOW", c2: "*notepad*", c3: "", c4: "", color: .red),
+        .init(icon: "photo", command: "FIND IMAGE", c2: "", c3: "", c4: "", color: .red),
+        .init(icon: "cursorarrow.motionlines", command: "MOUSE", c2: "Move", c3: "X = 215", c4: "Y = 24", color: Color(red: 0.10, green: 0.62, blue: 0.18))
     ]
 
     var body: some View {
         VStack(spacing: 0) {
-            topMenuBar
-            toolbar
+            topMenu
+            mainToolbar
             Divider()
             HStack(spacing: 0) {
-                sideToolbar
+                leftRail
                 Divider()
-                commandTable
+                gridArea
             }
         }
-        .background(Color(nsColor: .windowBackgroundColor))
+        .frame(minWidth: 1220, minHeight: 780)
+        .background(Color(red: 0.96, green: 0.96, blue: 0.97))
     }
 
-    private var topMenuBar: some View {
-        HStack(spacing: 28) {
+    private var topMenu: some View {
+        HStack(spacing: 24) {
             ForEach(["File", "Edit", "View", "Insert", "Actions", "Tools", "Help"], id: \.self) { item in
                 Text(item)
-                    .font(.system(size: 16, weight: .regular))
+                    .font(.system(size: 14))
+                    .foregroundStyle(.black)
             }
             Spacer()
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 10)
-        .background(.white)
+        .padding(.horizontal, 16)
+        .frame(height: 30)
+        .background(Color.white)
     }
 
-    private var toolbar: some View {
+    private var mainToolbar: some View {
         HStack(spacing: 0) {
-            toolbarButton(title: "RECORD", systemImage: "record.circle.fill", color: .orange)
-            toolbarButton(title: "PLAY", systemImage: "play.circle.fill", color: .orange)
+            toolBig(icon: "record.circle.fill", text: "RECORD", color: Color.orange)
+            toolBig(icon: "play.circle.fill", text: "PLAY", color: Color.orange)
 
-            Divider().frame(height: 48).padding(.horizontal, 16)
+            Rectangle().fill(Color.gray.opacity(0.25)).frame(width: 1, height: 48).padding(.horizontal, 16)
 
-            menuLikeButton("Record special")
-            menuLikeButton("Play special")
+            dropdownLike("Record special")
+            dropdownLike("Play special")
 
-            Divider().frame(height: 48).padding(.horizontal, 16)
+            Rectangle().fill(Color.gray.opacity(0.25)).frame(width: 1, height: 48).padding(.horizontal, 16)
 
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 Image(systemName: "gearshape.fill")
-                    .font(.system(size: 30))
+                    .font(.system(size: 28))
                     .foregroundStyle(.gray)
                 Text("Settings")
                     .font(.system(size: 18))
+                    .foregroundStyle(.black)
             }
 
             Spacer()
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 14)
+        .padding(.vertical, 12)
         .background(Color.white)
     }
 
-    private func toolbarButton(title: String, systemImage: String, color: Color) -> some View {
+    private func toolBig(icon: String, text: String, color: Color) -> some View {
         HStack(spacing: 10) {
-            Image(systemName: systemImage)
+            Image(systemName: icon)
                 .font(.system(size: 34))
                 .foregroundStyle(color)
-            Text(title)
+            Text(text)
                 .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(.black)
         }
-        .padding(.trailing, 26)
+        .frame(width: 150, alignment: .leading)
     }
 
-    private func menuLikeButton(_ title: String) -> some View {
+    private func dropdownLike(_ text: String) -> some View {
         HStack(spacing: 6) {
-            Text(title)
-                .font(.system(size: 18))
+            Text(text)
+                .font(.system(size: 17))
             Image(systemName: "chevron.down")
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: 10, weight: .bold))
         }
-        .padding(.trailing, 20)
+        .foregroundStyle(.black)
+        .frame(width: 150, alignment: .leading)
     }
 
-    private var sideToolbar: some View {
+    private var leftRail: some View {
         VStack(spacing: 0) {
-            ForEach(sideIcons, id: \.self) { icon in
-                Button(action: {}) {
-                    Image(systemName: icon)
-                        .font(.system(size: 20))
-                        .frame(width: 54, height: 44)
+            ForEach(sideItems.indices, id: \.self) { index in
+                VStack(spacing: 0) {
+                    Button(action: {}) {
+                        ZStack {
+                            Rectangle()
+                                .fill(index == 1 ? Color.blue.opacity(0.18) : Color.clear)
+                            Image(systemName: sideItems[index])
+                                .font(.system(size: 18))
+                                .foregroundStyle(.black)
+                        }
+                        .frame(width: 58, height: 46)
+                    }
+                    .buttonStyle(.plain)
+                    Rectangle().fill(Color.gray.opacity(0.18)).frame(height: 1)
                 }
-                .buttonStyle(.plain)
-                Divider()
             }
             Spacer()
         }
         .frame(width: 58)
-        .background(Color(nsColor: NSColor(calibratedWhite: 0.97, alpha: 1)))
+        .background(Color(red: 0.94, green: 0.94, blue: 0.95))
     }
 
-    private var commandTable: some View {
+    private var gridArea: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                headerCell("Command", width: 290)
-                headerCell("", width: 320)
-                headerCell("", width: 300)
-                headerCell("", width: 300)
+                header(width: 300, text: "Command")
+                header(width: 320, text: "")
+                header(width: 260, text: "")
+                header(width: 260, text: "")
+                Spacer(minLength: 0)
             }
-            Divider()
-
+            Rectangle().fill(Color.gray.opacity(0.18)).frame(height: 1)
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    ForEach(Array(rows.enumerated()), id: \.element.id) { index, row in
+                    ForEach(Array(rows.enumerated()), id: \.element.id) { idx, row in
                         HStack(spacing: 0) {
-                            tableCell(rowView(row.icon, row.command, row.color), width: 290, highlighted: index == rows.count - 1)
-                            tableCell(Text(row.action).foregroundStyle(row.color), width: 320, highlighted: index == rows.count - 1)
-                            tableCell(Text(row.value1).foregroundStyle(row.color), width: 300, highlighted: index == rows.count - 1)
-                            tableCell(Text(row.value2).foregroundStyle(row.color), width: 300, highlighted: index == rows.count - 1)
+                            cell(width: 300, highlighted: idx == rows.count - 1) {
+                                HStack(spacing: 10) {
+                                    Image(systemName: row.icon)
+                                    Text(row.command)
+                                        .font(.system(size: 17, weight: .medium))
+                                }
+                                .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
+                            }
+                            cell(width: 320, highlighted: idx == rows.count - 1) {
+                                Text(row.c2)
+                                    .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
+                            }
+                            cell(width: 260, highlighted: idx == rows.count - 1) {
+                                Text(row.c3)
+                                    .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
+                            }
+                            cell(width: 260, highlighted: idx == rows.count - 1) {
+                                Text(row.c4)
+                                    .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
+                            }
+                            Spacer(minLength: 0)
                         }
-                        Divider()
+                        Rectangle().fill(Color.gray.opacity(0.14)).frame(height: 1)
                     }
                 }
             }
+            .background(.white)
         }
+        .background(.white)
     }
 
-    private func rowView(_ icon: String, _ title: String, _ color: Color) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-            Text(title)
-                .font(.system(size: 17, weight: .medium))
-        }
-        .foregroundStyle(color)
-    }
-
-    private func headerCell(_ title: String, width: CGFloat) -> some View {
+    private func header(width: CGFloat, text: String) -> some View {
         HStack {
-            Text(title)
-                .font(.system(size: 15, weight: .medium))
-                .foregroundStyle(.primary)
+            Text(text)
+                .font(.system(size: 14, weight: .medium))
             Spacer()
         }
         .padding(.horizontal, 12)
-        .frame(width: width, height: 38)
-        .background(Color(nsColor: NSColor(calibratedWhite: 0.98, alpha: 1)))
+        .frame(width: width, height: 34)
+        .background(Color(red: 0.97, green: 0.97, blue: 0.98))
     }
 
-    private func tableCell<Content: View>(_ content: Content, width: CGFloat, highlighted: Bool) -> some View {
+    private func cell<Content: View>(width: CGFloat, highlighted: Bool, @ViewBuilder content: () -> Content) -> some View {
         HStack {
-            content
+            content()
             Spacer()
         }
+        .font(.system(size: 16))
         .padding(.horizontal, 12)
-        .frame(width: width, height: 42)
-        .background(highlighted ? Color.accentColor.opacity(0.75) : Color.white)
+        .frame(width: width, height: 40)
+        .background(highlighted ? Color(red: 0.20, green: 0.52, blue: 0.96) : Color.white)
     }
 
-    private var sideIcons: [String] {
+    private var sideItems: [String] {
         [
             "clock.arrow.circlepath",
             "cursorarrow.click.2",
             "hourglass",
             "doc.on.doc",
             "textformat",
-            "eyedropper",
-            "photo",
-            "record.circle",
+            "folder",
+            "wand.and.stars",
+            "camera.viewfinder",
             "globe",
-            "xmark.square",
+            "xmark.rectangle",
             "play.square",
-            "info.circle",
+            "slider.horizontal.3",
             "questionmark.circle"
         ]
     }
