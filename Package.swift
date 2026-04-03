@@ -2,20 +2,17 @@
 import PackageDescription
 
 let package = Package(
-    name: "MacroMac",
+    name: "MacroMacMockup",
     platforms: [
         .macOS(.v13)
     ],
     products: [
-        .executable(name: "MacroMac", targets: ["MacroMac"])
+        .executable(name: "MacroMacMockup", targets: ["MacroMacMockup"])
     ],
     targets: [
         .executableTarget(
-            name: "MacroMac"
-        ),
-        .testTarget(
-            name: "MacroMacTests",
-            dependencies: ["MacroMac"]
+            name: "MacroMacMockup",
+            path: "Sources/MacroMacMockup"
         )
     ]
 )
