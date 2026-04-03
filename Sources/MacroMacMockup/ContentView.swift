@@ -11,6 +11,11 @@ struct MacroRow: Identifiable {
 }
 
 struct ContentView: View {
+    @State private var selectedMenu: String = "File"
+    @State private var selectedToolbar: String? = nil
+    @State private var selectedSidebar: Int = 1
+    @State private var selectedRow: UUID? = nil
+
     private let rows: [MacroRow] = [
         .init(icon: "keyboard", command: "KEYBOARD", c2: "KeyDown", c3: "\"ShiftLeft\"", c4: "", color: Color(red: 0.10, green: 0.35, blue: 0.95)),
         .init(icon: "cursorarrow.motionlines", command: "MOUSE", c2: "Move", c3: "X = 215", c4: "Y = 24", color: Color(red: 0.10, green: 0.62, blue: 0.18)),
@@ -30,6 +35,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
             topMenu
             mainToolbar
+            statusBar
             Divider()
             HStack(spacing: 0) {
                 leftRail
@@ -42,11 +48,18 @@ struct ContentView: View {
     }
 
     private var topMenu: some View {
-        HStack(spacing: 24) {
+        HStack(spacing: 12) {
             ForEach(["File", "Edit", "View", "Insert", "Actions", "Tools", "Help"], id: \.self) { item in
-                Text(item)
-                    .font(.system(size: 14))
-                    .foregroundStyle(.black)
+                Button(action: { selectedMenu = item }) {
+                    Text(item)
+                        .font(.system(size: 14))
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 4)
+                        .background(selectedMenu == item ? Color.blue.opacity(0.15) : Color.clear)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                }
+                .buttonStyle(.plain)
             }
             Spacer()
         }
@@ -67,14 +80,21 @@ struct ContentView: View {
 
             Rectangle().fill(Color.gray.opacity(0.25)).frame(width: 1, height: 48).padding(.horizontal, 16)
 
-            HStack(spacing: 8) {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 28))
-                    .foregroundStyle(.gray)
-                Text("Settings")
-                    .font(.system(size: 18))
-                    .foregroundStyle(.black)
+            Button(action: { selectedToolbar = "Settings" }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 28))
+                        .foregroundStyle(.gray)
+                    Text("Settings")
+                        .font(.system(size: 18))
+                        .foregroundStyle(.black)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+                .background(selectedToolbar == "Settings" ? Color.blue.opacity(0.12) : Color.clear)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
             }
+            .buttonStyle(.plain)
 
             Spacer()
         }
@@ -84,36 +104,50 @@ struct ContentView: View {
     }
 
     private func toolBig(icon: String, text: String, color: Color) -> some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 34))
-                .foregroundStyle(color)
-            Text(text)
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(.black)
+        Button(action: { selectedToolbar = text }) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 34))
+                    .foregroundStyle(color)
+                Text(text)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(.black)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .frame(width: 150, alignment: .leading)
+            .background(selectedToolbar == text ? Color.blue.opacity(0.12) : Color.clear)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
         }
-        .frame(width: 150, alignment: .leading)
+        .buttonStyle(.plain)
     }
 
     private func dropdownLike(_ text: String) -> some View {
-        HStack(spacing: 6) {
-            Text(text)
-                .font(.system(size: 17))
-            Image(systemName: "chevron.down")
-                .font(.system(size: 10, weight: .bold))
+        Button(action: { selectedToolbar = text }) {
+            HStack(spacing: 6) {
+                Text(text)
+                    .font(.system(size: 17))
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 10, weight: .bold))
+            }
+            .foregroundStyle(.black)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .frame(width: 150, alignment: .leading)
+            .background(selectedToolbar == text ? Color.blue.opacity(0.12) : Color.clear)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
         }
-        .foregroundStyle(.black)
-        .frame(width: 150, alignment: .leading)
+        .buttonStyle(.plain)
     }
 
     private var leftRail: some View {
         VStack(spacing: 0) {
             ForEach(sideItems.indices, id: \.self) { index in
                 VStack(spacing: 0) {
-                    Button(action: {}) {
+                    Button(action: { selectedSidebar = index }) {
                         ZStack {
                             Rectangle()
-                                .fill(index == 1 ? Color.blue.opacity(0.18) : Color.clear)
+                                .fill(index == selectedSidebar ? Color.blue.opacity(0.18) : Color.clear)
                             Image(systemName: sideItems[index])
                                 .font(.system(size: 18))
                                 .foregroundStyle(.black)
@@ -143,8 +177,9 @@ struct ContentView: View {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(rows.enumerated()), id: \.element.id) { idx, row in
+                        Button(action: { selectedRow = row.id }) {
                         HStack(spacing: 0) {
-                            cell(width: 300, highlighted: idx == rows.count - 1) {
+                            cell(width: 300, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
                                 HStack(spacing: 10) {
                                     Image(systemName: row.icon)
                                     Text(row.command)
@@ -152,20 +187,22 @@ struct ContentView: View {
                                 }
                                 .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
                             }
-                            cell(width: 320, highlighted: idx == rows.count - 1) {
+                            cell(width: 320, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
                                 Text(row.c2)
                                     .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
                             }
-                            cell(width: 260, highlighted: idx == rows.count - 1) {
+                            cell(width: 260, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
                                 Text(row.c3)
                                     .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
                             }
-                            cell(width: 260, highlighted: idx == rows.count - 1) {
+                            cell(width: 260, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
                                 Text(row.c4)
                                     .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
                             }
                             Spacer(minLength: 0)
                         }
+                        }
+                        .buttonStyle(.plain)
                         Rectangle().fill(Color.gray.opacity(0.14)).frame(height: 1)
                     }
                 }
@@ -194,7 +231,7 @@ struct ContentView: View {
         .font(.system(size: 16))
         .padding(.horizontal, 12)
         .frame(width: width, height: 40)
-        .background(highlighted ? Color(red: 0.20, green: 0.52, blue: 0.96) : Color.white)
+        .background((selectedRow != nil && highlighted) || selectedRow == nil && highlighted ? Color(red: 0.20, green: 0.52, blue: 0.96) : Color.white)
     }
 
     private var sideItems: [String] {
@@ -215,6 +252,23 @@ struct ContentView: View {
         ]
     }
 }
+
+    private var statusBar: some View {
+        HStack {
+            Text("Selected menu: \(selectedMenu)")
+            Text("•")
+            Text("Toolbar: \(selectedToolbar ?? "None")")
+            Text("•")
+            Text("Sidebar: \(selectedSidebar + 1)")
+            Spacer()
+            Text("Mockup only")
+                .foregroundStyle(.secondary)
+        }
+        .font(.system(size: 12))
+        .padding(.horizontal, 16)
+        .frame(height: 26)
+        .background(Color(red: 0.985, green: 0.985, blue: 0.99))
+    }
 
 #Preview {
     ContentView()
