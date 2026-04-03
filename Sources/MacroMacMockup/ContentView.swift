@@ -35,7 +35,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
             topMenu
             mainToolbar
-            statusBar
+            mockStatusBar
             Divider()
             HStack(spacing: 0) {
                 leftRail
@@ -70,8 +70,8 @@ struct ContentView: View {
 
     private var mainToolbar: some View {
         HStack(spacing: 0) {
-            toolBig(icon: "record.circle.fill", text: "RECORD", color: Color.orange)
-            toolBig(icon: "play.circle.fill", text: "PLAY", color: Color.orange)
+            toolBig(icon: "record.circle.fill", text: "RECORD", color: .orange)
+            toolBig(icon: "play.circle.fill", text: "PLAY", color: .orange)
 
             Rectangle().fill(Color.gray.opacity(0.25)).frame(width: 1, height: 48).padding(.horizontal, 16)
 
@@ -101,6 +101,23 @@ struct ContentView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background(Color.white)
+    }
+
+    private var mockStatusBar: some View {
+        HStack {
+            Text("Selected menu: \(selectedMenu)")
+            Text("•")
+            Text("Toolbar: \(selectedToolbar ?? "None")")
+            Text("•")
+            Text("Sidebar: \(selectedSidebar + 1)")
+            Spacer()
+            Text("Mockup only")
+                .foregroundStyle(.secondary)
+        }
+        .font(.system(size: 12))
+        .padding(.horizontal, 16)
+        .frame(height: 26)
+        .background(Color(red: 0.985, green: 0.985, blue: 0.99))
     }
 
     private func toolBig(icon: String, text: String, color: Color) -> some View {
@@ -177,30 +194,31 @@ struct ContentView: View {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     ForEach(Array(rows.enumerated()), id: \.element.id) { idx, row in
+                        let isSelected = selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)
                         Button(action: { selectedRow = row.id }) {
-                        HStack(spacing: 0) {
-                            cell(width: 300, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
-                                HStack(spacing: 10) {
-                                    Image(systemName: row.icon)
-                                    Text(row.command)
-                                        .font(.system(size: 17, weight: .medium))
+                            HStack(spacing: 0) {
+                                cell(width: 300, highlighted: isSelected) {
+                                    HStack(spacing: 10) {
+                                        Image(systemName: row.icon)
+                                        Text(row.command)
+                                            .font(.system(size: 17, weight: .medium))
+                                    }
+                                    .foregroundStyle(isSelected ? .white : row.color)
                                 }
-                                .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
+                                cell(width: 320, highlighted: isSelected) {
+                                    Text(row.c2)
+                                        .foregroundStyle(isSelected ? .white : row.color)
+                                }
+                                cell(width: 260, highlighted: isSelected) {
+                                    Text(row.c3)
+                                        .foregroundStyle(isSelected ? .white : row.color)
+                                }
+                                cell(width: 260, highlighted: isSelected) {
+                                    Text(row.c4)
+                                        .foregroundStyle(isSelected ? .white : row.color)
+                                }
+                                Spacer(minLength: 0)
                             }
-                            cell(width: 320, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
-                                Text(row.c2)
-                                    .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
-                            }
-                            cell(width: 260, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
-                                Text(row.c3)
-                                    .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
-                            }
-                            cell(width: 260, highlighted: selectedRow == row.id || (selectedRow == nil && idx == rows.count - 1)) {
-                                Text(row.c4)
-                                    .foregroundStyle(idx == rows.count - 1 ? .white : row.color)
-                            }
-                            Spacer(minLength: 0)
-                        }
                         }
                         .buttonStyle(.plain)
                         Rectangle().fill(Color.gray.opacity(0.14)).frame(height: 1)
@@ -231,7 +249,7 @@ struct ContentView: View {
         .font(.system(size: 16))
         .padding(.horizontal, 12)
         .frame(width: width, height: 40)
-        .background((selectedRow != nil && highlighted) || selectedRow == nil && highlighted ? Color(red: 0.20, green: 0.52, blue: 0.96) : Color.white)
+        .background(highlighted ? Color(red: 0.20, green: 0.52, blue: 0.96) : Color.white)
     }
 
     private var sideItems: [String] {
@@ -252,23 +270,6 @@ struct ContentView: View {
         ]
     }
 }
-
-    private var statusBar: some View {
-        HStack {
-            Text("Selected menu: \(selectedMenu)")
-            Text("•")
-            Text("Toolbar: \(selectedToolbar ?? "None")")
-            Text("•")
-            Text("Sidebar: \(selectedSidebar + 1)")
-            Spacer()
-            Text("Mockup only")
-                .foregroundStyle(.secondary)
-        }
-        .font(.system(size: 12))
-        .padding(.horizontal, 16)
-        .frame(height: 26)
-        .background(Color(red: 0.985, green: 0.985, blue: 0.99))
-    }
 
 #Preview {
     ContentView()
