@@ -2,20 +2,20 @@
 import PackageDescription
 
 let package = Package(
-    name: "MacroMacRicky",
+    name: "MacroMac",
     platforms: [
         .macOS(.v13)
     ],
     products: [
-        .executable(name: "MacroMacRicky", targets: ["MacroMacRicky"])
+        .executable(name: "MacroMac", targets: ["MacroMac"])
     ],
     targets: [
         .executableTarget(
-            name: "MacroMacRicky"
+            name: "MacroMac"
         ),
         .testTarget(
-            name: "MacroMacRickyTests",
-            dependencies: ["MacroMacRicky"]
+            name: "MacroMacTests",
+            dependencies: ["MacroMac"]
         )
     ]
 )
