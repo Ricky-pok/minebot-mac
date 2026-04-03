@@ -1,32 +1,26 @@
-# MacroMac
+# MacroMac Mockup
 
-A native Swift starter project for building a macOS macro application.
+A minimal macOS SwiftUI mockup project for designing a macro recorder style interface.
 
-## Goal
-Build a clean Mac app foundation for:
-- recording keyboard and mouse actions
-- replaying macros
-- saving and loading macro profiles
-- adding global hotkeys
-- expanding later into a fuller editor UI
+## Current Goal
+Right now this repo is intentionally focused on **design only**.
 
-## Current Status
-This repository is now a **Swift project starter** focused on a macOS macro app foundation.
+No real macro logic yet.
+No recorder yet.
+No playback yet.
+No permissions system yet.
 
-## Planned Core Modules
-- Recorder
-- Player
-- Permissions
-- Storage
-- Models
-- UI / App shell
+The goal for now is just to shape the interface and keep the project simple and stable.
 
-## Stack
-- Swift
-- macOS
-- Swift Package Manager
+## Active Structure
+- `MacroMacMockup/`
+  - `MacroMacMockupApp.swift`
+  - `ContentView.swift`
+  - `README.md`
+- `Assets/`
+  - placeholder for future design assets
+- `archive/`
+  - older scaffolding kept aside for later reference
 
-## Run
-```bash
-swift run
-```
+## Next Phase
+Once the UI looks right, the next step will be creating a clean real macOS app target in Xcode and wiring the interface into it.

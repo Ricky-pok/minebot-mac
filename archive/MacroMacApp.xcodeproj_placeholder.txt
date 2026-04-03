@@ -1,0 +1,2 @@
+Open this folder in Xcode and create a macOS App target if you want a full native Xcode project.
+For now, these SwiftUI files are ready to be copied into a new SwiftUI macOS app target.
